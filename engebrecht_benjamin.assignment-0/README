@@ -1,0 +1,18 @@
+Benjamin Engebrecht
+1-19-2015
+
+This assignmnent is all about listing the set of rational numbers. To this end, I have written two programs that use both iterative and recusive solutions to complete this problem.
+
+ISSUES I RAN INTO:
+	
+	Allocating 100,000,000 integers isn't going to happen on the stack
+	Heap is a lot better place for large arrays
+
+TO MAKE:
+	
+	Run "make" in the root directory
+
+OUTPUT:
+	
+	-program1 : Iterative solution
+	-program2 : Recursive solution

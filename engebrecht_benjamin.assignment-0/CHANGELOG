@@ -1,0 +1,14 @@
+V0.1 - 1-14-2015
+
+	-Began work
+
+V0.2 - 1-15-2015
+	
+	-Finished code, has seg fault though
+
+V1.0 - 1-19-2015
+
+	Almost forgot project in stack of projects due on this Tuesday (second week no less)
+
+	-Fixed seg fault by allocating space on the heap instead of the stack
+	-Completed first program
