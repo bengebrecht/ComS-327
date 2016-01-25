@@ -20,9 +20,9 @@ int main(int argc, char *argv[])
 	//Set up random number seed
 	srand(seed);
 
-	static char screen[80][21] = {0};
+	char screen[80][21] = {{0}};
 
-	static int rooms[10][2] = {0};
+	int rooms[10][2] = {{0}};
 
 	init(screen);
 

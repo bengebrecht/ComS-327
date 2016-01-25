@@ -1,0 +1,31 @@
+Benjamin Engebrecht
+1-24-2015
+
+
+This assignment requires the development of a console based dungeon generator. To accomplish this, I have written a short library of functions that keeps most of the code out of the main method for the sake of extensibility.
+
+
+ISSUES I RAN INTO:
+	
+	-My corridor drawing algorithm isn't pretty
+
+	-On the plus side, it uses substantially less processing power than Dijkstra's algorithm
+
+
+THINGS I LEARNED:
+
+	-Writing a line-drawing algorithm is one thing, writing a continuous line-drawing algorithm 
+	 is another
+
+	-The drawing_helper method was only 40 lines to begin with, corner cases expanded it to 
+	 over 100	
+
+
+TO MAKE:
+	
+	-Run "make all" in the root directory
+
+
+OUTPUT:
+	
+	-main : The dungeon generator, can take input of a seed or just run to generate it randomly
