@@ -1,0 +1,25 @@
+V0.1 - 1-23-2015 2:32PM
+
+	-Began work
+
+V1.0 - 1-23-2015 5:47PM
+	
+	-Finished room drawing algorithm
+
+V1.1 - 1-23-2015 6:56PM
+
+	-Cleaned up room drawing algorithm and started corridor algorithm
+
+V1.2 - 1-24-2015 4ish PM
+
+	-Started line drawing algorithm
+
+V1.3 - 1-24-2015 8ish PM
+
+	-Finished line drawing algorithm, need to add hashes on height change to make it traverseable
+
+V1.4 - 1-24-2015 9:33PM
+
+	-Paths are navigable
+
+V2.0 - 
