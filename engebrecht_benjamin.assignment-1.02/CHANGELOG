@@ -1,0 +1,12 @@
+V0.1 - 1-23-2015 10:18PM
+
+	-Began work
+
+V0.2 - 1-23-2015 10:22PM
+
+	-Split code into separate classes to add clarity
+	-This assignment, barring a few changes in gen.c, is mostly concerned with io.c
+
+V1.0 - 1-23-2015 10:58PM
+
+	-First method written (command handling)
