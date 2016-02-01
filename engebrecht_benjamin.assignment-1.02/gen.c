@@ -1,38 +1,62 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+
+#include "gen.h"
 
 //Define maximum length and width
-#define MAX_LENGTH 7
+#define MAX_HEIGHT 7
 #define MAX_WIDTH 7
 
 
-void init(char arr[][21]) {
+void init(struct node screen[80][21]) {
 	
-	int i,j;
+	int i,j,seed;
+
+	seed = (int)time(NULL);
 
 	//Write all cells to the "space" character
-	for (i = 0; i < 80; i++) {
-		for (j = 0; j < 21; j++) {
-			arr[i][j] = ' ';
+	for (i = 1; i < 79; i++) {
+		for (j = 1; j < 20; j++) {
+			srand(seed);
+			screen[i][j].c = ' ';
+			screen[i][j].hardness = rand() % 254 + 1;
+			seed++;
 		}
 	}
+
+	for (i = 0; i < 80; i++) {
+		screen[i][0].c = ' ';
+		screen[i][0].hardness = 255;		
+		screen[i][21].c = ' ';
+		screen[i][21].hardness = 255;
+	}
+
+	for (j = 1; j < 20; j++) {
+		screen[0][j].c = ' ';
+		screen[0][j].hardness = 255;
+		screen[80][j].c = ' ';
+		screen[80][j].hardness = 255;
+	}
+
+
 }
 
-void print(char arr[][21]) {
+void print(struct node screen[80][21]) {
 
 	int i,j;
 
 	//Print entire screen buffer
 	for (i = 0; i < 21; i++) {
 		for (j = 0; j < 80; j++) {
-			printf("%c", arr[j][i]);
+			printf("%c", screen[j][i].c);
 		}
 
 		printf("\n");
 	}
 }
 
-int is_valid(char screen[][21], int x, int y, int width, int length) {
+int is_valid(struct node screen[80][21], int x, int y, int width, int length) {
 
 	int i, j;
 
@@ -41,7 +65,7 @@ int is_valid(char screen[][21], int x, int y, int width, int length) {
 
 		for (j = y; j < y+length; j++) {
 
-			if (screen[i][j] != ' ') {
+			if (screen[i][j].c != ' ') {
 
 				return 0;
 
@@ -54,16 +78,16 @@ int is_valid(char screen[][21], int x, int y, int width, int length) {
 	//Area to check runs from x-1 to x+width+1, scan all y values 
 	for (i = x-1; i < x+width+1; i++) {
 		
-		if (screen[i][y-1] != ' ') {return 0;}
+		if (screen[i][y-1].c != ' ') {return 0;}
 
-		if (screen[i][y+length+1] != ' ') {return 0;}
+		if (screen[i][y+length+1].c != ' ') {return 0;}
 	}
 
 	for (j = y; j < y+length; j++) {
 
-		if (screen[x-1][j] != ' ') {return 0;}
+		if (screen[x-1][j].c != ' ') {return 0;}
 
-		if (screen[x+width+1][j] != ' ') {return 0;}
+		if (screen[x+width+1][j].c != ' ') {return 0;}
 	}
 
 	return 1;
@@ -80,7 +104,7 @@ int is_valid(char screen[][21], int x, int y, int width, int length) {
 */
 
 
-void draw_rooms(char screen[][21], int room[][2]) {
+void draw_rooms(struct node screen[80][21], struct room_data room[]) {
 
 	int area = 0;
 	int roomnum = 0;
@@ -88,33 +112,38 @@ void draw_rooms(char screen[][21], int room[][2]) {
 	while (((double)area/1680) < 0.10 || roomnum < 5) {
 		//Get random number between 3 and 3+MAX_*
 		int width = (rand() % (MAX_WIDTH)) + 3;
-		int length = (rand() % (MAX_LENGTH)) + 3;
+		int height = (rand() % (MAX_HEIGHT)) + 3;
 
 		//Get random number between 1-(80-MAX_LENGTH)
 		int x = (rand() % (80-MAX_WIDTH-5)) + 1;
 		//Get random number between 1-(21-MAX_WIDTH)
-		int y = (rand() % (21-MAX_LENGTH-5)) + 1;
+		int y = (rand() % (21-MAX_HEIGHT-5)) + 1;
 
 		//Check if the proposed area is valid or not
-		if (is_valid(screen, x, y, width, length)) {
+		if (is_valid(screen, x, y, width, height)) {
 
 			int i, j;
 			
 			//Write proposed area to screen buffer as periods
 			for (i = x; i < x+width; i++) {
-				for (j = y; j < y+length; j++) {
+				for (j = y; j < y+height; j++) {
 
-					screen[i][j] = '.';
+					screen[i][j].c = '.';
 				
 				}
 			}
 
 			//Add proposed area to total area
-			area = area + (width*length);
+			area = area + (width*height);
+
+			room[roomnum].x = x;
+			room[roomnum].y = y;
+			room[roomnum].width = width;
+			room[roomnum].height = height;
 
 			//Add midpoint of each room to "room" array
-			room[roomnum][0] = x+(width/2);
-			room[roomnum][1] = y+(length/2);
+			room[roomnum].mid_x = x+(width/2);
+			room[roomnum].mid_y = y+(height/2);
 
 			roomnum++;
 
@@ -138,13 +167,13 @@ relative to (x0, y0). Switching points 0 & 1 in that case allows
 a lot of cases to be ignored and saved a lot of code.
 */
 
-void drawing_helper(char screen[][21], int rooms[][2], int i, int j) {
+void drawing_helper(struct node screen[80][21], struct room_data rooms[], int i, int j) {
 
 	//clarity > memory
-	int x1 = rooms[i][0];
-	int y1 = rooms[i][1];
-	int x0 = rooms[j][0];
-	int y0 = rooms[j][1];
+	int x1 = rooms[i].mid_x;
+	int y1 = rooms[i].mid_y;
+	int x0 = rooms[j].mid_x;
+	int y0 = rooms[j].mid_y;
 
 	//Geometry
 	//Switch order of pairs to work with line algorithm
@@ -188,20 +217,20 @@ void drawing_helper(char screen[][21], int rooms[][2], int i, int j) {
 			if (change == 1) {
 
 				//If the line changes height and the next index is blank...
-				if (screen[index-1][height] == ' ') {
+				if (screen[index-1][height].c == ' ') {
 
 					//Write another hash mark to make it continuous
-					screen[index-1][height] = '#';
+					screen[index-1][height].c = '#';
 
 					change = 0;
 
 				}
 			}
 			//If the proposed cell doesn't have anything in it...
-			if (screen[index][height] == ' ') {
+			if (screen[index][height].c == ' ') {
 
 				//Write hash there
-				screen[index][height] = '#';
+				screen[index][height].c = '#';
 
 
 
@@ -244,10 +273,10 @@ void drawing_helper(char screen[][21], int rooms[][2], int i, int j) {
 			if (change == 1) {
 
 				//If the cell is clear.. (had to include prev_height to fix bug)
-				if (screen[prev_height][index] == ' ' && prev_height != 0) {
+				if (screen[prev_height][index].c == ' ' && prev_height != 0) {
 
 					//Write hash to empty cell
-					screen[prev_height][index] = '#';
+					screen[prev_height][index].c = '#';
 
 					change = 0;
 				}
@@ -255,10 +284,10 @@ void drawing_helper(char screen[][21], int rooms[][2], int i, int j) {
 			}
 
 			//If the proposed cell is clear...
-			if (screen[height][index] == ' ') {
+			if (screen[height][index].c == ' ') {
 
 				//Write hash symbol
-				screen[height][index] = '#';
+				screen[height][index].c = '#';
 
 			}
 
@@ -267,12 +296,12 @@ void drawing_helper(char screen[][21], int rooms[][2], int i, int j) {
 	}
 }
 
-void draw_corridors(char screen[][21], int rooms[][2]) {
+void draw_corridors(struct node screen[80][21], struct room_data rooms[]) {
 
 	int i;
 
 	//For all rooms that have a valid value
-	for (i = 1; rooms[i][0] != 0; i++) {
+	for (i = 1; rooms[i].mid_x != 0; i++) {
 		//Draw a line between current room and previous room
 		drawing_helper(screen, rooms, i, i-1);
 	}

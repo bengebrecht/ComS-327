@@ -10,3 +10,8 @@ V0.2 - 1-23-2015 10:22PM
 V1.0 - 1-23-2015 10:58PM
 
 	-First method written (command handling)
+
+V1.1 - 1-23-2015 1:15AM
+
+	-Overhauled dungeon generation to include hardness
+	-Moved screen and room arrays to structs

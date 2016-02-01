@@ -1,9 +1,25 @@
-void draw_rooms(char screen[][21], int rooms[][2]);
 
-void init(char arr[][21]);
+struct node {
+	char c;
+	int hardness;
+};
 
-void print(char arr[][21]);
+struct room_data {
+	int x;
+	int y;
+	int mid_x;
+	int mid_y;
+	int width;
+	int height;
+};
 
-void draw_corridors(char screen[][21], int rooms[][2]);
 
-void drawing_helper(char screen[][21], int rooms[][2], int i, int j);
+void draw_rooms(struct node screen[80][21], struct room_data rooms[]);
+
+void init(struct node screen[80][21]);
+
+void print(struct node screen[80][21]);
+
+void draw_corridors(struct node screen[80][21], struct room_data rooms[]);
+
+void drawing_helper(struct node screen[80][21], struct room_data rooms[], int i, int j);

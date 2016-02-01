@@ -7,31 +7,34 @@
 #include "io.h"
 
 typedef enum command {
-	read,
-	write,
-	rw
+	gen,
+	save,
+	load,
+	save_load
 } command_t;
+
+
 
 int main(int argc, char *argv[])
 {
 
 	command_t command;
 
-	int seed;
+	int seed = (int)time(NULL);
 
 	if (argc == 1) {
-		seed = (int)time(NULL);
+		command = gen;
 	} else if (argc == 2){
 		if (!strcmp(argv[1], "--load")) {
-			command = read;
+			command = load;
 		} else if (!strcmp(argv[1], "--save")) {
 			command = save;
 		} else {
 			fprintf(stderr, "Bad argument\n");
 		}
 	} else if (argc == 3) {
-		if ((!strcmp(argv[1], "--load") && !strcmp(argv[2], "--save") || (!strcmp(argv[1], "--save") && !strcmp(argv[2], "--load")) {
-			command = rw;
+		if (((!strcmp(argv[1], "--load")) && (!strcmp(argv[2], "--save"))) || ((!strcmp(argv[1], "--save")) && (!strcmp(argv[2], "--load")))) {
+			command = save_load;
 		} else {
 			fprintf(stderr, "Bad argument\n");			
 		}
@@ -44,23 +47,67 @@ int main(int argc, char *argv[])
 	// 	seed = atoi(argv[1]);
 	// }
 
+	struct node screen[80][21] = {{{0}}};
 
-	//Set up random number seed
-	srand(seed);
+	struct room_data rooms[10] = {{0}};
 
-	char screen[80][21] = {{0}};
+	switch (command) {
+		case gen:
 
-	int rooms[10][2] = {{0}};
+			srand(seed);
 
-	init(screen);
+			init(screen);
 
-	draw_rooms(screen, rooms);
+			draw_rooms(screen, rooms);
 
-	draw_corridors(screen, rooms);
+			draw_corridors(screen, rooms);
 
-	print(screen);
+			print(screen);
 
-	printf("Seed: %d argc: %d\n", seed, argc);
+			break;
+
+		case load:
+
+			screen = load();
+
+			print(screen);
+
+			break;
+
+		case save:
+
+			srand(seed);
+
+			init(screen);
+
+			draw_rooms(screen, rooms);
+
+			draw_corridors(screen, rooms);
+
+			save(screen, rooms);
+
+			print(screen);			
+
+			break;
+
+		case save_load:
+
+			srand(seed);
+
+			screen = load();
+
+			print(screen);
+
+			init(screen);
+
+			draw_rooms(screen, rooms);
+
+			draw_corridors(screen, rooms);
+
+			save(screen, rooms);
+
+			break;
+	}
 
 	return 0;
 }
