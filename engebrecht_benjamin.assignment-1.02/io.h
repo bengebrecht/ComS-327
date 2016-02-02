@@ -1,3 +1,3 @@
-void save(char screen[][21], int rooms[][2]);
+void save(struct node screen[80][21], struct room_data rooms[]);
 
-void load(char arg[]);
+void load(struct node screen[80][21]);

@@ -8,6 +8,24 @@
 #define MAX_HEIGHT 7
 #define MAX_WIDTH 7
 
+void init_border(struct node screen[80][21]) {
+
+	int i, j;
+
+	for (i = 0; i < 80; i++) {
+		screen[i][0].c = ' ';
+		screen[i][0].hardness = 255;		
+		screen[i][20].c = ' ';
+		screen[i][20].hardness = 255;
+	}
+
+	for (j = 1; j < 20; j++) {
+		screen[0][j].c = ' ';
+		screen[0][j].hardness = 255;
+		screen[79][j].c = ' ';
+		screen[79][j].hardness = 255;
+	}
+}
 
 void init(struct node screen[80][21]) {
 	
@@ -25,21 +43,7 @@ void init(struct node screen[80][21]) {
 		}
 	}
 
-	for (i = 0; i < 80; i++) {
-		screen[i][0].c = ' ';
-		screen[i][0].hardness = 255;		
-		screen[i][21].c = ' ';
-		screen[i][21].hardness = 255;
-	}
-
-	for (j = 1; j < 20; j++) {
-		screen[0][j].c = ' ';
-		screen[0][j].hardness = 255;
-		screen[80][j].c = ' ';
-		screen[80][j].hardness = 255;
-	}
-
-
+	init_border(screen);
 }
 
 void print(struct node screen[80][21]) {
@@ -50,6 +54,21 @@ void print(struct node screen[80][21]) {
 	for (i = 0; i < 21; i++) {
 		for (j = 0; j < 80; j++) {
 			printf("%c", screen[j][i].c);
+		}
+
+		printf("\n");
+	}
+}
+
+//Debug function
+void print_hardness(struct node screen[80][21]) {
+
+	int i,j;
+
+	//Print entire screen buffer
+	for (i = 0; i < 21; i++) {
+		for (j = 0; j < 80; j++) {
+			printf("%d ", screen[j][i].hardness);
 		}
 
 		printf("\n");
