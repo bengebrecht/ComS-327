@@ -24,10 +24,14 @@ void save(struct node screen[80][21], struct room_data rooms[]) {
 
 	char str[15];
 
-	sprintf(str, "RLG327\0\0\0\0\0\0%d", ((i*4)+1495))
+	sprintf(str, "RLG327\0\0\0\0")
 
-//Write header
-	fwrite(str,6,1,fp);
+	//Write header
+	fwrite(str,10,1,fp);
+
+	int file_size = ((i*4)+1495);
+
+	fwrite(file_size, 4, 1, fp);
 
 	uint8_t screen_buff[1482] = {0};
 
@@ -62,6 +66,7 @@ void save(struct node screen[80][21], struct room_data rooms[]) {
 	fwrite(room_buff, k*4, 1, fp);
 
 	//close file
+	fclose(fp);
 
 }
 
@@ -131,5 +136,6 @@ void load(struct node screen[80][21]) {
 	}
 
 	//close file
+	fclose(fp);
 
 }
