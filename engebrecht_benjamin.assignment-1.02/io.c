@@ -8,6 +8,10 @@
 
 void save(struct node screen[80][21], struct room_data rooms[]) {
 
+	char * path;
+	FILE * fp;
+	uint8_t * room_buff;
+
 	int s = strlen(getenv("HOME"));
 
 	path = (char*) malloc(sizeof(char)*(s+16));
@@ -24,14 +28,18 @@ void save(struct node screen[80][21], struct room_data rooms[]) {
 
 	char str[15];
 
-	sprintf(str, "RLG327\0\0\0\0")
+	sprintf(str, "RLG327");
 
 	//Write header
-	fwrite(str,10,1,fp);
+	fwrite(str,6,1,fp);
 
-	int file_size = ((i*4)+1495);
+	int file_size = 0;
 
-	fwrite(file_size, 4, 1, fp);
+	fwrite(&file_size, 4, 1, fp);
+
+	file_size = ((i*4)+1495);
+
+	fwrite(&file_size, 4, 1, fp);
 
 	uint8_t screen_buff[1482] = {0};
 
@@ -51,7 +59,7 @@ void save(struct node screen[80][21], struct room_data rooms[]) {
 		k++;
 	}
 
-	uint8_t room_buff[k*4] = {0};
+	room_buff = (uint8_t*) malloc(k*4);
 
 	j=0;
 
@@ -67,6 +75,8 @@ void save(struct node screen[80][21], struct room_data rooms[]) {
 
 	//close file
 	fclose(fp);
+
+	free(path);
 
 }
 
@@ -91,11 +101,15 @@ void load(struct node screen[80][21]) {
 
 	fseek(fp, 10, SEEK_SET);
 
+	size = (int*) malloc(sizeof(int));
+
 	fread(size,sizeof(int),1,fp);
 
 	rewind(fp);
 
-	buffer = (char*) malloc (sizeof(char)*size);
+	int size_int = *size;
+
+	buffer = (uint8_t*) malloc (sizeof(char)*(size_int));
 	if(buffer == NULL) {
 		printf("Memory error");
 	}
@@ -111,13 +125,14 @@ void load(struct node screen[80][21]) {
 			screen[i][j].hardness = (int) fgetc(fp);
 		}
 	}
+	free(buffer);
 
 	//Draw rooms
 
-	buffer = (uint8_t*) malloc (sizeof(uint8_t)*(size-1495));
-	fread(buffer,sizeof(uint8_t),size-1495,fp);
+	buffer = (uint8_t*) malloc (sizeof(uint8_t)*(size_int-1495));
+	fread(buffer,sizeof(uint8_t),size_int-1495,fp);
 
-	for(i=0; i< (size-1495); i+=4) {
+	for(i=0; i< (size_int-1495); i+=4) {
 		for(j=buffer[i]; j<buffer[i+2]; j++) {
 			for(k=buffer[i+1]; k<buffer[i+3]; k++) {
 				screen[j][k].c = '.';
@@ -137,5 +152,9 @@ void load(struct node screen[80][21]) {
 
 	//close file
 	fclose(fp);
+
+	free(buffer);
+	free(size);
+	free(path);
 
 }
