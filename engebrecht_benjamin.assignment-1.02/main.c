@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
 			draw_corridors(screen, rooms);
 
-			//print_hardness(screen);
+			print_hardness(screen);
 
 			break;
 
@@ -86,7 +86,9 @@ int main(int argc, char *argv[])
 
 			save(screen, rooms);
 
-			print(screen);			
+			print(screen);
+
+			// print_hardness(screen);			
 
 			break;
 
@@ -105,6 +107,8 @@ int main(int argc, char *argv[])
 			draw_corridors(screen, rooms);
 
 			save(screen, rooms);
+
+			print(screen);
 
 			break;
 	}

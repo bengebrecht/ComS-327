@@ -148,6 +148,7 @@ void draw_rooms(struct node screen[80][21], struct room_data room[]) {
 				for (j = y; j < y+height; j++) {
 
 					screen[i][j].c = '.';
+					screen[i][j].hardness = 0;
 				
 				}
 			}
@@ -240,6 +241,7 @@ void drawing_helper(struct node screen[80][21], struct room_data rooms[], int i,
 
 					//Write another hash mark to make it continuous
 					screen[index-1][height].c = '#';
+					screen[index-1][height].hardness = 0;
 
 					change = 0;
 
@@ -250,6 +252,7 @@ void drawing_helper(struct node screen[80][21], struct room_data rooms[], int i,
 
 				//Write hash there
 				screen[index][height].c = '#';
+				screen[index][height].hardness = 0;
 
 
 
@@ -296,6 +299,7 @@ void drawing_helper(struct node screen[80][21], struct room_data rooms[], int i,
 
 					//Write hash to empty cell
 					screen[prev_height][index].c = '#';
+					screen[prev_height][index].hardness = 0;
 
 					change = 0;
 				}
@@ -307,6 +311,7 @@ void drawing_helper(struct node screen[80][21], struct room_data rooms[], int i,
 
 				//Write hash symbol
 				screen[height][index].c = '#';
+				screen[height][index].hardness = 0;
 
 			}
 

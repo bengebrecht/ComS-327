@@ -1,7 +1,7 @@
 
 struct node {
 	char c;
-	char hardness;
+	int hardness;
 };
 
 struct room_data {
@@ -17,6 +17,8 @@ struct room_data {
 void draw_rooms(struct node screen[80][21], struct room_data rooms[]);
 
 void init(struct node screen[80][21]);
+
+void init_border(struct node screen[80][21]);
 
 void print(struct node screen[80][21]);
 
